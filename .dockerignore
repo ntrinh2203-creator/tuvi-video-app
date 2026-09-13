@@ -1,0 +1,6 @@
+jobs/*
+!jobs/.gitkeep
+__pycache__/
+*.pyc
+.git/
+.venv/
