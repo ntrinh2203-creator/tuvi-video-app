@@ -1,0 +1,55 @@
+:root{
+  --bg:#12122A;
+  --surface:#1B1B3A;
+  --surface-2:#201F44;
+  --text:#EDE8D9;
+  --text-muted:#A79FC7;
+  --border:#34335C;
+  --gold:#D8B84A;
+  --jade:#57B0A0;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,'Segoe UI',Roboto,sans-serif;
+  line-height:1.6;
+  padding:0 20px;
+}
+.wrap{max-width:760px; margin:0 auto; padding:48px 0 80px;}
+.eyebrow{font-family:ui-monospace,monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:.8em;}
+h1{font-size:2rem; margin:0 0 .3em;}
+.lede{color:var(--text-muted); max-width:60ch;}
+h2{font-size:1.2rem; margin:0 0 .6em;}
+form{margin-top:36px; display:flex; flex-direction:column; gap:22px;}
+.row{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+@media (max-width:600px){ .row{grid-template-columns:1fr;} }
+.field{display:flex; flex-direction:column; gap:8px;}
+label{font-weight:600; font-size:.92rem;}
+textarea,input[type=text],select{
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:12px 14px; color:var(--text); font-size:.95rem; font-family:inherit;
+}
+textarea{resize:vertical;}
+input[type=file]{
+  background:var(--surface); border:1px dashed var(--border); border-radius:10px;
+  padding:12px 14px; color:var(--text-muted); font-size:.88rem;
+}
+.hint{margin:0; font-size:.8rem; color:var(--text-muted);}
+code{font-family:ui-monospace,monospace; background:var(--surface-2); padding:.1em .4em; border-radius:4px;}
+button{
+  background:var(--gold); color:#1a1400; border:none; border-radius:10px;
+  padding:14px 20px; font-size:1rem; font-weight:700; cursor:pointer;
+}
+button:disabled{opacity:.55; cursor:progress;}
+#progress-box{margin-top:40px; border-top:1px solid var(--border); padding-top:28px;}
+#log-list{list-style:none; padding:0; display:flex; flex-direction:column; gap:6px; font-size:.88rem; color:var(--text-muted); font-family:ui-monospace,monospace;}
+#log-list li.err{color:#e57373;}
+video{width:100%; max-width:340px; border-radius:12px; border:1px solid var(--border); display:block; margin:18px 0;}
+.downloads{display:flex; gap:12px; flex-wrap:wrap;}
+.btn{
+  display:inline-block; background:var(--jade); color:#062420; text-decoration:none;
+  padding:10px 18px; border-radius:8px; font-weight:600; font-size:.9rem;
+}
+.btn.secondary{background:transparent; border:1px solid var(--border); color:var(--text);}
