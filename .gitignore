@@ -3,3 +3,7 @@ jobs/*
 __pycache__/
 *.pyc
 .venv/
+venv/
+ffmpeg_bin/
+ffmpeg_extract/
+ffmpeg_temp.zip
