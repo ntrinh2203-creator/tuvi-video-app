@@ -7,3 +7,4 @@ venv/
 ffmpeg_bin/
 ffmpeg_extract/
 ffmpeg_temp.zip
+tmp/
