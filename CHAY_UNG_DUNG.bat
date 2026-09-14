@@ -3,6 +3,11 @@ setlocal enabledelayedexpansion
 chcp 65001 >nul
 cd /d "%~dp0"
 
+if not exist "%~dp0tmp" mkdir "%~dp0tmp"
+set "TEMP=%~dp0tmp"
+set "TMP=%~dp0tmp"
+set "PIP_CACHE_DIR=%~dp0tmp\pip-cache"
+
 echo ===============================================
 echo   Xuong Dung Video Tu Dong - Khoi dong
 echo ===============================================
