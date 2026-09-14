@@ -4,77 +4,127 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Xưởng Dựng Video Tự Động — Lá Số Tử Vi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="wrap">
     <header>
-      <div class="eyebrow">Công cụ nội bộ · chạy trên máy của bạn</div>
+      <div class="eyebrow">Công cụ nội bộ · thả kịch bản, nhận video</div>
       <h1>Xưởng Dựng Video Tự Động</h1>
       <p class="lede">Dán kịch bản (định dạng SCENE 1, SCENE 2... theo đúng prompt trong kế hoạch kênh), thả ảnh từng cảnh vào, chọn giọng đọc — hệ thống tự tạo giọng, tự chuyển động ảnh (Ken Burns), tự gắn phụ đề karaoke khớp giọng đọc, tự hoà nhạc nền, xuất video 9:16 và tự soạn sẵn mô tả + hashtag.</p>
     </header>
 
     <form id="render-form">
-      <div class="field">
-        <label for="script">1. Kịch bản</label>
-        <textarea id="script" name="script" rows="10" placeholder="SCENE 1: Nếu bạn sinh năm nằm trong nhóm này...
+      <div class="card">
+        <div class="step-head">
+          <div class="step-num">1</div>
+          <div class="step-title">Kịch bản</div>
+        </div>
+        <div class="field">
+          <textarea id="script" name="script" rows="10" placeholder="SCENE 1: Nếu bạn sinh năm nằm trong nhóm này...
 SCENE 2: Đây là chuyện đã xảy ra với một người có sao Thất Sát thủ Mệnh...
 SCENE 3: Đại vận năm đó của họ đi vào cung Tật Ách...
 SCENE 4: ...và đây là điều bạn nên chuẩn bị."></textarea>
-        <p class="hint">Không có SCENE cũng được — chỉ cần cách mỗi cảnh 1 dòng trống. Theo số liệu đối chiếu thực tế, video giải thích sâu 1 khái niệm dài <b>~1 phút 50 – 2 phút 45</b> (khoảng 8-14 cảnh) giữ chân tốt hơn hẳn clip ngắn 30-60s.</p>
-      </div>
-
-      <div class="field">
-        <label for="images">2. Ảnh từng cảnh (chọn nhiều ảnh, đúng thứ tự cảnh)</label>
-        <input type="file" id="images" name="images" accept="image/*" multiple required>
-        <p class="hint">Đặt tên file kiểu <code>1.jpg, 2.jpg, 3.jpg...</code> để đảm bảo đúng thứ tự. Ít ảnh hơn số cảnh sẽ tự lặp lại ảnh cuối.</p>
-      </div>
-
-      <div class="row">
-        <div class="field">
-          <label for="voice">3. Giọng đọc</label>
-          <select id="voice" name="voice">
-            {% for key, val in voices.items() %}
-            <option value="{{ key }}">{{ 'Nữ ấm áp' if key == 'nu_am_ap' else 'Nam trầm ấm' }} ({{ val }})</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="field">
-          <label for="title">4. Tiêu đề (để làm thumbnail nháp)</label>
-          <input type="text" id="title" name="title" placeholder="Vì sao năm đó chị ấy mất tất cả">
+          <p class="hint">Không có SCENE cũng được — chỉ cần cách mỗi cảnh 1 dòng trống. Video giải thích sâu 1 khái niệm dài <b>~1 phút 50 – 2 phút 45</b> (khoảng 8-14 cảnh) giữ chân tốt hơn hẳn clip ngắn 30-60s.</p>
         </div>
       </div>
 
-      <div class="row">
-        <div class="field">
-          <label for="music">5. Nhạc nền (tuỳ chọn, .mp3)</label>
-          <input type="file" id="music" name="music" accept="audio/*">
+      <div class="card">
+        <div class="step-head">
+          <div class="step-num">2</div>
+          <div class="step-title">Ảnh từng cảnh</div>
         </div>
         <div class="field">
-          <label for="channel_tag">6. Hashtag thương hiệu kênh (tuỳ chọn)</label>
-          <input type="text" id="channel_tag" name="channel_tag" placeholder="tenkenhcuaban (không cần dấu #)">
+          <label class="dropzone" id="images-drop" for="images">
+            <div class="dropzone-icon">🖼️</div>
+            <div class="dropzone-text"><b>Bấm để chọn ảnh</b> hoặc kéo-thả vào đây</div>
+            <input type="file" id="images" name="images" accept="image/*" multiple required>
+          </label>
+          <div class="file-chip-list" id="images-chips"></div>
+          <p class="hint">Đặt tên file kiểu <code>1.jpg, 2.jpg, 3.jpg...</code> để đảm bảo đúng thứ tự cảnh. Ít ảnh hơn số cảnh sẽ tự lặp lại ảnh cuối.</p>
         </div>
       </div>
 
-      <button type="submit" id="submit-btn">Tạo video</button>
+      <div class="card">
+        <div class="row">
+          <div class="field">
+            <div class="step-head" style="margin-bottom:8px;">
+              <div class="step-num">3</div>
+              <div class="step-title">Giọng đọc</div>
+            </div>
+            <select id="voice" name="voice">
+              {% for key, val in voices.items() %}
+              <option value="{{ key }}">{{ 'Nữ ấm áp' if key == 'nu_am_ap' else 'Nam trầm ấm' }} ({{ val }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="field">
+            <div class="step-head" style="margin-bottom:8px;">
+              <div class="step-num">4</div>
+              <div class="step-title">Tiêu đề</div>
+              <div class="step-optional">Thumbnail nháp</div>
+            </div>
+            <input type="text" id="title" name="title" placeholder="Vì sao năm đó chị ấy mất tất cả">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row">
+          <div class="field">
+            <div class="step-head" style="margin-bottom:8px;">
+              <div class="step-num">5</div>
+              <div class="step-title">Nhạc nền</div>
+              <div class="step-optional">Tuỳ chọn</div>
+            </div>
+            <label class="dropzone" id="music-drop" for="music">
+              <div class="dropzone-icon">🎵</div>
+              <div class="dropzone-text"><b>Bấm để chọn nhạc</b> (.mp3)</div>
+              <input type="file" id="music" name="music" accept="audio/*">
+            </label>
+            <div class="file-chip-list" id="music-chips"></div>
+          </div>
+          <div class="field">
+            <div class="step-head" style="margin-bottom:8px;">
+              <div class="step-num">6</div>
+              <div class="step-title">Hashtag kênh</div>
+              <div class="step-optional">Tuỳ chọn</div>
+            </div>
+            <input type="text" id="channel_tag" name="channel_tag" placeholder="tenkenhcuaban (không cần dấu #)">
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" id="submit-btn">✨ Tạo video</button>
+      </div>
     </form>
 
     <section id="progress-box" hidden>
-      <h2>Tiến trình</h2>
+      <h2>Đang xử lý</h2>
       <ul id="log-list"></ul>
       <div id="result" hidden>
-        <video id="preview" controls playsinline></video>
-        <div class="downloads">
-          <a id="dl-video" class="btn" download>Tải video (.mp4)</a>
-          <a id="dl-thumb" class="btn secondary" download>Tải thumbnail nháp (.png)</a>
-        </div>
-        <div class="field" style="margin-top:20px;">
-          <label for="description-box">Mô tả &amp; hashtag gợi ý (đã theo đúng công thức đối chiếu thực tế)</label>
-          <textarea id="description-box" rows="8" readonly></textarea>
-          <button type="button" id="copy-desc-btn" class="btn secondary" style="width:fit-content;">Copy mô tả</button>
+        <div class="result-grid">
+          <div class="phone-frame">
+            <video id="preview" controls playsinline></video>
+          </div>
+          <div>
+            <div class="downloads">
+              <a id="dl-video" class="btn" download>⬇ Tải video (.mp4)</a>
+              <a id="dl-thumb" class="btn secondary" download>⬇ Tải thumbnail (.png)</a>
+            </div>
+            <div class="desc-card">
+              <label for="description-box">Mô tả &amp; hashtag gợi ý</label>
+              <textarea id="description-box" rows="7" readonly style="margin-top:8px;"></textarea>
+              <button type="button" id="copy-desc-btn" class="btn secondary" style="margin-top:10px;">Copy mô tả</button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+
+    <footer class="foot-note">Xưởng Dựng Video Tự Động · chạy trên máy của bạn</footer>
   </div>
 
   <script src="{{ url_for('static', filename='app.js') }}"></script>
